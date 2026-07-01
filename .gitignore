@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Data files (generated locally — do not commit raw data)
+data/raw/
+data/processed/
+outputs/*.csv
+outputs/*.parquet
+outputs/*.json
+
+# AWS credentials — NEVER commit
+.aws/
+*.pem
+*.key
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Terraform state (if added later)
+*.tfstate
+*.tfstate.backup
+.terraform/

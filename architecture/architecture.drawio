@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="draw.io" version="21.0.0" type="device">
+  <diagram name="AWS Sales Analytics Architecture" id="sales-analytics-arch">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ===== LAYER HEADERS ===== -->
+        <mxCell id="layer-ingest" value="Ingestion Layer" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontStyle=1;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="50" y="30" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-storage" value="Storage Layer (S3)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontStyle=1;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="300" y="30" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-catalog" value="Catalog Layer (Glue)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontStyle=1;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="550" y="30" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-query" value="Query Layer (Athena)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontStyle=1;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="800" y="30" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-viz" value="Visualisation (QuickSight)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontStyle=1;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="30" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ===== INGESTION ===== -->
+        <mxCell id="py-gen" value="generate_datasets.py&#xa;(Python)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="90" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="py-clean" value="clean_sales_data.py&#xa;(Python)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="165" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="py-validate" value="validate_dataset.py&#xa;(Python)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="30" y="240" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ===== S3 BUCKETS ===== -->
+        <mxCell id="s3-raw" value="S3: /raw&#xa;(CSV)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;fillColor=#7AA116;strokeColor=none;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="300" y="95" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s3-raw-lbl" value="S3: /raw (CSV)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="280" y="158" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s3-proc" value="" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;fillColor=#7AA116;strokeColor=none;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="300" y="195" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s3-proc-lbl" value="S3: /processed&#xa;(Parquet, partitioned)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="270" y="258" width="120" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s3-results" value="" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;fillColor=#7AA116;strokeColor=none;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="300" y="300" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s3-results-lbl" value="S3: /athena-results" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="275" y="363" width="110" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ===== GLUE ===== -->
+        <mxCell id="glue-catalog" value="" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.glue;fillColor=#E7157B;strokeColor=none;sketch=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="565" y="145" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="glue-lbl" value="Glue Data Catalog&#xa;(sales DB)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="545" y="210" width="100" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="glue-crawler" value="" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.glue_crawlers;fillColor=#E7157B;strokeColor=none;sketch=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="565" y="270" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="glue-crawler-lbl" value="Glue Crawler&#xa;(auto partition)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="545" y="335" width="100" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ===== ATHENA ===== -->
+        <mxCell id="athena" value="" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.athena;fillColor=#8C4FFF;strokeColor=none;sketch=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="820" y="170" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="athena-lbl" value="Amazon Athena&#xa;(Presto/Trino)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="800" y="235" width="100" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="workgroup" value="Workgroup&#xa;(budget alert)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="810" y="280" width="80" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ===== QUICKSIGHT ===== -->
+        <mxCell id="qs-spice" value="SPICE&#xa;(in-memory cache)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="100" width="130" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="qs-exec" value="Executive Dashboard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="165" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="qs-reg" value="Regional Dashboard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="215" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="qs-cust" value="Customer Dashboard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="265" width="130" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ===== EDGES ===== -->
+        <!-- Python gen → S3 raw -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="py-gen" target="s3-raw" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Python gen → Python clean -->
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="py-gen" target="py-clean" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Python clean → S3 processed -->
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="py-clean" target="s3-proc" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Python validate → S3 processed (reads) -->
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;dashed=1;" edge="1" source="py-validate" target="s3-proc" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- S3 processed → Glue Catalog -->
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s3-proc" target="glue-catalog" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Glue Crawler → S3 processed (discovers partitions) -->
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;dashed=1;" edge="1" source="glue-crawler" target="s3-proc" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Glue Catalog → Athena -->
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="glue-catalog" target="athena" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Athena → S3 processed (reads) -->
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;dashed=1;" edge="1" source="athena" target="s3-proc" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Athena → S3 results (writes) -->
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="athena" target="s3-results" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Athena → QuickSight SPICE -->
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="athena" target="qs-spice" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- SPICE → Dashboards -->
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="qs-spice" target="qs-exec" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="qs-spice" target="qs-reg" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="qs-spice" target="qs-cust" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
