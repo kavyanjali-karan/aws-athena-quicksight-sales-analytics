@@ -9,7 +9,7 @@
 USE sales;
 
 -- ---------------------------------------------------------------------------
--- DQ-01  Completeness — row count baseline
+-- DQ-010  Completeness — row count baseline
 -- ---------------------------------------------------------------------------
 SELECT
     'customers'          AS table_name,

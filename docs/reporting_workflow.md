@@ -30,7 +30,7 @@ Stage 5: Catalog Registration
     Option B: Glue Crawler (automated, daily)
 
 Stage 6: Query Layer
-    Run athena/01 through athena/11 in order
+    Run athena/010 through athena/11 in order
     Materialise CTAS aggregation tables
 
 Stage 7: Visualisation
@@ -60,7 +60,7 @@ clean_sales_data.py ──────────► validate_dataset.py
        ▼
  Glue Catalog
        │
-       ├──► Athena 01–03 (DDL + validation)
+       ├──► Athena 010–03 (DDL + validation)
        │
        ├──► Athena 04–11 (business reporting queries)
        │

@@ -1,7 +1,7 @@
 -- =============================================================================
 -- 04_kpi_calculations.sql
 -- Purpose : Core business KPIs used across all executive reportings.
---           Results are materialised as CTAS tables for QuickSight SPICE.
+--         
 -- =============================================================================
 
 USE sales;

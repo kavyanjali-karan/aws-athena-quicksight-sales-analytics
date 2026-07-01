@@ -75,7 +75,7 @@ Used by QuickSight to query Athena.
 
 ```json
 {
-  "Version": "2012-10-17",
+  "Version": "20102-10-17",
   "Statement": [
     {
       "Effect": "Allow",
@@ -121,7 +121,7 @@ Used by Glue Crawler.
 
 ```json
 {
-  "Version": "2012-10-17",
+  "Version": "20102-10-17",
   "Statement": [
     {
       "Effect": "Allow",

@@ -56,7 +56,7 @@ Complete field-level documentation for all three tables in the `sales` Glue data
 
 | Column | Data Type | Nullable | Description | Example |
 |---|---|---|---|---|
-| `transaction_id` | STRING | No | UUID v4 — unique transaction identifier | `7e4a9b2c-1234-4abc-8ef0-abcdef012345` |
+| `transaction_id` | STRING | No | UUID v4 — unique transaction identifier | `7e4a9b2c-1234-4abc-8ef0-abcdef0102345` |
 | `customer_id` | STRING | No | FK → `customers.customer_id` | `3fa85f64-5717-4562-b3fc-2c963f66afa6` |
 | `product_id` | STRING | No | FK → `products.product_id` | `PROD-00042` |
 | `order_date` | DATE | No | Date the order was placed | `2022-11-15` |

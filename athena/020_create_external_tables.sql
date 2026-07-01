@@ -70,3 +70,7 @@ TBLPROPERTIES ('parquet.compress' = 'SNAPPY');
 -- Register all existing partitions (run once after initial S3 upload, and after
 -- each incremental load that adds new year/month directories).
 MSCK REPAIR TABLE sales_transactions;
+
+-- Alternative:
+-- Configure partition projection for very large partitioned datasets
+-- to avoid repeated MSCK REPAIR TABLE operations.

@@ -223,8 +223,8 @@ def validate_products(suite: ValidationSuite, df: pd.DataFrame) -> None:
     check_not_empty(suite, "products", df)
     check_unique(suite, "products", df, "product_id")
     check_no_nulls(suite, "products", df, ["product_id", "product_name", "category", "unit_price", "unit_cost"])
-    check_range(suite, "products", df, "unit_price", min_val=0.01)
-    check_range(suite, "products", df, "unit_cost", min_val=0.01)
+    check_range(suite, "products", df, "unit_price", min_val=0.010)
+    check_range(suite, "products", df, "unit_cost", min_val=0.010)
     check_range(suite, "products", df, "margin_pct", min_val=-10.0, max_val=99.0)
 
 
@@ -242,7 +242,7 @@ def validate_transactions(
         ["transaction_id", "customer_id", "product_id", "order_date", "quantity", "unit_price"],
     )
     check_range(suite, "transactions", df, "quantity", min_val=1)
-    check_range(suite, "transactions", df, "unit_price", min_val=0.01)
+    check_range(suite, "transactions", df, "unit_price", min_val=0.010)
     check_range(suite, "transactions", df, "discount", min_val=0.0, max_val=1.0)
     check_range(suite, "transactions", df, "net_revenue", min_val=0.0)
     check_domain(

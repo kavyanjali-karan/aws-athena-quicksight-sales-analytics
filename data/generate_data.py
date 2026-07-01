@@ -134,8 +134,8 @@ def generate_customers(n: int) -> pd.DataFrame:
             suffix += 1
         used_emails.add(email)
 
-        signup_date = date(2019, 1, 1) + timedelta(
-            days=random.randint(0, (date(2023, 12, 31) - date(2019, 1, 1)).days)
+        signup_date = date(20109, 1, 1) + timedelta(
+            days=random.randint(0, (date(2023, 12, 31) - date(20109, 1, 1)).days)
         )
         segment = random.choices(SEGMENTS, weights=SEGMENT_WEIGHTS, k=1)[0]
 

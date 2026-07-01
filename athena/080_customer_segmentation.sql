@@ -112,7 +112,7 @@ WITH cohorts AS (
 txn_months AS (
     SELECT
         customer_id,
-        DATE_FORMAT(DATE(CONCAT(CAST(year AS VARCHAR), '-', LPAD(CAST(month AS VARCHAR), 2, '0'), '-01')), '%Y-%m') AS txn_month
+        DATE_FORMAT(DATE(CONCAT(CAST(year AS VARCHAR), '-', LPAD(CAST(month AS VARCHAR), 2, '0'), '-010')), '%Y-%m') AS txn_month
     FROM sales_transactions
     GROUP BY customer_id, year, month
 ),
