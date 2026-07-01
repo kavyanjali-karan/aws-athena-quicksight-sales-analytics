@@ -1,6 +1,6 @@
 # Regional Dashboard Specification
 
-## Purpose
+## Business Objective
 
 Enable regional managers and operations teams to compare performance across geographic
 markets, identify growth opportunities, and monitor market share shifts over time.
@@ -39,6 +39,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 
 ### 1 — Regional Revenue Comparison (Grouped Bar Chart — All Regions)
 
+- **Business question:** Which regions generate the most revenue and which are growing fastest?
 - **Type:** Grouped bar chart
 - **X-axis:** Region
 - **Y-axis:** Revenue
@@ -48,6 +49,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 
 ### 2 — Market Share by Region Over Time (Stacked Area Chart)
 
+- **Business question:** Is any region gaining or losing market share over time?
 - **Type:** 100% stacked area chart
 - **X-axis:** Month (`YYYY-MM`)
 - **Y-axis:** Revenue share % (0–100%)
@@ -56,6 +58,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 
 ### 3 — Regional Monthly Revenue Trend (Small Multiples — Line Charts)
 
+- **Business question:** How does each region trend month over month, and which markets show seasonality?
 - **Type:** Small multiples (one line chart per region, 5 charts in grid)
 - **X-axis:** Month
 - **Y-axis:** Revenue
@@ -65,6 +68,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 
 ### 4 — Top 5 Cities per Region (Bar Chart — Parameterised)
 
+- **Business question:** Which cities are the strongest revenue contributors within the selected region?
 - **Type:** Horizontal bar chart
 - **Filter:** Controlled by Region selector parameter
 - **Dimension:** `city`
@@ -74,6 +78,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 
 ### 5 — Regional Profitability Matrix (Heatmap / Pivot Table)
 
+- **Business question:** Which region × category combinations are margin-positive or margin-negative?
 - **Type:** Pivot table with conditional formatting
 - **Rows:** Region
 - **Columns:** Category
@@ -83,6 +88,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 
 ### 6 — Revenue vs. Discount Rate by Region (Bubble Chart)
 
+- **Business question:** Which regions rely on the heaviest discounting, and what is the margin cost?
 - **X-axis:** Avg discount %
 - **Y-axis:** Gross margin %
 - **Bubble size:** Revenue
@@ -92,6 +98,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 
 ### 7 — YoY Growth by Region (Table with Sparklines)
 
+- **Business question:** Which regions have the strongest compounded growth and where is momentum slowing?
 - **Type:** Table
 - **Columns:** Region, 2020 Revenue, 2021 Revenue, 2022 Revenue, 2023 Revenue, CAGR, YoY Growth %, Sparkline
 - **Conditional formatting:** Growth % → red (negative) / green (positive)
@@ -105,7 +112,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 |---|---|---|
 | Region | Multi-select (with "All" toggle) | All regions |
 | Year | Multi-select | All years |
-| Month range | Slider / date picker | Full year |
+| Date Range | Date picker | Full year |
 | Category | Multi-select | All categories |
 
 ---
@@ -137,7 +144,7 @@ All Regions view
 
 ```
 ┌───────────────────────────────────────────────────────────────────┐
-│ [Logo]  Regional Performance Dashboard    [Filters: Region / Year] │
+│ [Logo]  Regional Performance Dashboard    [Filters: Region / Year / Category / Date Range] │
 ├───────┬────────┬──────────┬────────────┬──────────┬──────────────┤
 │Region │ Orders │Rev/Cust  │Avg Ship Days│Mkt Share │ YoY Growth  │
 │ KPI   │  KPI   │   KPI    │    KPI     │   KPI    │    KPI      │

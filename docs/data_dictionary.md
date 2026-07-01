@@ -6,7 +6,7 @@ Complete field-level documentation for all three tables in the `sales` Glue data
 
 ## Table: `customers`
 
-**Location:** `s3://YOUR-BUCKET/sales-analytics/processed/customers/`  
+**Location:** `s3://YOUR-BUCKET/sales-business reporting/processed/customers/`  
 **Format:** Parquet (Snappy)  
 **Grain:** One row per customer  
 **Primary key:** `customer_id`  
@@ -27,7 +27,7 @@ Complete field-level documentation for all three tables in the `sales` Glue data
 
 ## Table: `products`
 
-**Location:** `s3://YOUR-BUCKET/sales-analytics/processed/products/`  
+**Location:** `s3://YOUR-BUCKET/sales-business reporting/processed/products/`  
 **Format:** Parquet (Snappy)  
 **Grain:** One row per product SKU  
 **Primary key:** `product_id`  
@@ -47,7 +47,7 @@ Complete field-level documentation for all three tables in the `sales` Glue data
 
 ## Table: `sales_transactions`
 
-**Location:** `s3://YOUR-BUCKET/sales-analytics/processed/sales_transactions/year=*/month=*/`  
+**Location:** `s3://YOUR-BUCKET/sales-business reporting/processed/sales_transactions/year=*/month=*/`  
 **Format:** Parquet (Snappy), Hive-partitioned  
 **Grain:** One row per line item / transaction  
 **Primary key:** `transaction_id`  

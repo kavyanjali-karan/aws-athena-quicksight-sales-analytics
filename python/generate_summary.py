@@ -10,7 +10,7 @@ Output includes:
   - Key financial KPIs (total revenue, avg order value, top product)
 
 This report is written to outputs/summary_report.json and printed to stdout
-for easy pipeline inspection.
+for easy reporting-system inspection.
 
 Usage:
     python python/generate_summary.py [--input data/processed] [--output outputs]

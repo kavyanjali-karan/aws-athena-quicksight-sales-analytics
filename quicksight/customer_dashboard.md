@@ -1,6 +1,6 @@
 # Customer Dashboard Specification
 
-## Purpose
+## Business Objective
 
 Give sales, marketing, and CRM teams a clear view of customer lifetime value,
 behavioral segmentation, cohort retention, and RFM scoring to support retention
@@ -40,6 +40,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 
 ### 1 — LTV Distribution (Histogram)
 
+- **Business question:** Is customer value concentrated among a small number of high-spend accounts?
 - **Type:** Histogram with 20 bins
 - **X-axis:** Lifetime value (USD)
 - **Y-axis:** Customer count
@@ -49,6 +50,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 
 ### 2 — Customer Segment Revenue Contribution (Stacked Bar + Donut)
 
+- **Business question:** Which customer segments contribute the most revenue and customer count?
 - **Type:** Side-by-side view
   - Donut: Revenue share % by segment
   - Bar: Absolute revenue + customer count by segment
@@ -58,6 +60,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 
 ### 3 — RFM Segment Bubble Chart
 
+- **Business question:** Which customers are most valuable right now and which are at risk of churning?
 - **X-axis:** Recency score (1–5, higher = more recent)
 - **Y-axis:** Frequency score (1–5, higher = more frequent)
 - **Bubble size:** Monetary score
@@ -67,6 +70,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 
 ### 4 — RFM Segment Summary (Table)
 
+- **Business question:** Which customer segments need immediate retention or growth action?
 - **Type:** Table with conditional formatting
 - **Columns:** RFM Segment, Customer Count, % of Base, Avg LTV, Avg Orders, Avg Recency (days), Action Recommended
 - **Conditional formatting:** At-Risk and Lost rows highlighted in red
@@ -79,6 +83,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 
 ### 5 — Cohort Retention Heatmap
 
+- **Business question:** How does retention change across signup cohorts and months after first purchase?
 - **Type:** Heatmap (cohort retention grid)
 - **Rows:** Cohort month (signup month)
 - **Columns:** Month number since signup (M+0, M+1, M+2, … M+12)
@@ -88,6 +93,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 
 ### 6 — Monthly New vs. Returning Customers (Combo Chart)
 
+- **Business question:** Are new customer acquisition rates improving and how does returning-customer behavior change over time?
 - **Type:** Combo: bars = new customers, line = returning customer count
 - **X-axis:** Month
 - **Y-axis (left):** Customer count
@@ -98,6 +104,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 
 ### 7 — Top 20 Customers by LTV (Table)
 
+- **Business question:** Which individual customers generate the highest lifetime revenue?
 - **Type:** Table
 - **Columns:** Rank, Customer Name, Segment, Region, LTV, Orders, First Order, Last Order, Days Active, Avg Order Value
 - **Sorting:** LTV descending
@@ -105,6 +112,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 
 ### 8 — Customer Geographic Distribution (Map Visual)
 
+- **Business question:** Where geographically are the strongest customer clusters concentrated?
 - **Type:** Point / bubble map (US states or city-level)
 - **Dimension:** City / State
 - **Measure:** `SUM(net_revenue)` or `COUNT(customer_id)`
@@ -129,7 +137,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 ## Drill-Down Paths
 
 ```
-Dashboard level
+dashboard level
   └── Click RFM segment bubble → Filter all visuals to that segment
         └── LTV distribution shows only that segment
         └── Top 20 table shows only that segment's customers
@@ -155,7 +163,7 @@ Dashboard level
 
 ```
 ┌────────────────────────────────────────────────────────────────────┐
-│ [Logo]  Customer Intelligence Dashboard  [Filters: Segment/Region] │
+│ [Logo]  Customer Intelligence Dashboard  [Filters: Segment / Region / RFM Segment / Signup Year / Date Range] │
 ├───────┬────────┬────────────┬───────────┬─────────┬───────────────┤
 │Total  │Avg LTV │ Champions  │ At-Risk   │Avg Ord  │ Days Between  │
 │Cust.  │  KPI   │   KPI      │   KPI     │  KPI    │  Orders KPI   │

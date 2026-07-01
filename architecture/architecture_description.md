@@ -2,8 +2,8 @@
 
 ## Overview
 
-This project implements a cloud-native, serverless Business Intelligence pipeline on AWS.
-The architecture follows the **Medallion pattern** (raw → processed → curated) using
+This project implements a cloud-native, serverless Business Intelligence reporting system on AWS.
+The architecture follows a **multi-layer reporting pattern** (raw → processed → analytical reporting) using
 Amazon S3 as the data lake foundation.
 
 ---
@@ -12,11 +12,11 @@ Amazon S3 as the data lake foundation.
 
 ### 1. Ingestion Layer
 
-**Tool:** Python scripts (local or AWS Lambda / AWS Glue Python Shell)
+**Tool:** Python scripts for local data preparation and transformation
 
 - `generate_datasets.py` creates synthetic CSV data for customers, products, and transactions.
 - `clean_sales_data.py` transforms raw CSVs into Snappy-compressed Parquet, partitioned by `year/month`.
-- Data lands in `s3://YOUR-BUCKET/sales-analytics/processed/`.
+- Data lands in `s3://YOUR-BUCKET/sales-business reporting/processed/`.
 
 **Why Parquet?**
 Parquet is columnar, enabling Athena to skip non-queried columns and reducing both scan cost and latency. Snappy compression reduces storage footprint by ~70% vs. raw CSV.
@@ -57,8 +57,8 @@ For production, schedule a Glue Crawler to run 30 minutes after each ETL job com
 
 **Tool:** Amazon QuickSight (Enterprise Edition for row-level security)
 
-- SPICE (Super-fast, Parallel, In-memory Calculation Engine) caches Athena results for sub-second dashboard rendering.
-- Three dashboards: Executive, Regional, Customer (see `quicksight/`).
+- SPICE (Super-fast, Parallel, In-memory Calculation Engine) caches Athena results for sub-second executive reporting rendering.
+- Three executive reportings: Executive, Regional, Customer (see `quicksight/`).
 - SPICE refresh: daily at 06:00 UTC.
 - Row-level security: regional managers can be restricted to their own region using QuickSight RLS datasets.
 
@@ -73,13 +73,13 @@ Local / Lambda
     │
     ├── clean_sales_data.py   → data/processed/ (Parquet, partitioned)
     │       │
-    │       └── aws s3 sync  → s3://YOUR-BUCKET/sales-analytics/processed/
+    │       └── aws s3 sync  → s3://YOUR-BUCKET/sales-business reporting/processed/
     │
     └── AWS Glue (optional crawler) → Glue Data Catalog
             │
             └── Amazon Athena (SQL queries 01–11)
                     │
-                    └── SPICE Dataset → Amazon QuickSight Dashboards
+                    └── SPICE Dataset → Amazon QuickSight executive reportings
 ```
 
 ---
@@ -91,7 +91,7 @@ Local / Lambda
 | Storage format | Parquet + Snappy | Columnar I/O, 70% size reduction vs CSV |
 | Partitioning | year / month | Prunes irrelevant data for time-range queries |
 | Query engine | Athena (serverless) | Zero-infrastructure, pay-per-TB scanned |
-| BI tool | QuickSight + SPICE | Managed service, scales to 10K users with no server ops |
+| BI tool | QuickSight + SPICE | Managed service for executive reporting with fast dashboard refresh |
 | Schema management | Glue Catalog | Single source of truth; decoupled from compute |
 | Authentication | IAM + QuickSight IAM roles | Least-privilege, no long-lived credentials |
 | Cost guardrail | Athena workgroup budget | Prevents runaway query costs |
@@ -107,18 +107,18 @@ Local / Lambda
 | `sales/customers` | Glue Table | Customer dimension table |
 | `sales/products` | Glue Table | Product dimension table |
 | `sales/sales_transactions` | Glue Table | Fact table (partitioned) |
-| `sales-analytics-workgroup` | Athena Workgroup | Query isolation + budget control |
-| `SalesAnalyticsExecutive` | QuickSight Dashboard | C-suite view |
-| `SalesAnalyticsRegional` | QuickSight Dashboard | Regional manager view |
-| `SalesAnalyticsCustomer` | QuickSight Dashboard | CRM / marketing view |
-| `sales-analytics-role` | IAM Role | Athena + S3 read permissions for QuickSight |
+| `sales-business reporting-workgroup` | Athena Workgroup | Query isolation + budget control |
+| `Salesbusiness reportingExecutive` | QuickSight executive reporting | C-suite view |
+| `Salesbusiness reportingRegional` | QuickSight executive reporting | Regional manager view |
+| `Salesbusiness reportingCustomer` | QuickSight executive reporting | CRM / marketing view |
+| `sales-business reporting-role` | IAM Role | Athena + S3 read permissions for QuickSight |
 
 ---
 
 ## Security Model
 
-- **S3 bucket:** Block all public access. Bucket policy restricts to `sales-analytics-role` ARN.
-- **Athena:** IAM policies limit query execution to the `sales-analytics-workgroup` only.
+- **S3 bucket:** Block all public access. Bucket policy restricts to `sales-business reporting-role` ARN.
+- **Athena:** IAM policies limit query execution to the `sales-business reporting-workgroup` only.
 - **QuickSight:** Enterprise Edition enables row-level security (RLS) and VPC connectivity.
 - **Encryption:** S3 server-side encryption with AWS KMS (SSE-KMS); Athena encrypts query results in transit.
 - **Audit:** AWS CloudTrail logs all S3 object access and Athena query history.

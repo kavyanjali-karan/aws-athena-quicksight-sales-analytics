@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#f8fafc"/>
+  <rect x="80" y="90" width="1040" height="520" rx="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+  <text x="120" y="150" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="700" fill="#0f172a">AWS BI Architecture</text>
+  <rect x="140" y="200" width="220" height="110" rx="16" fill="#dbeafe"/>
+  <text x="180" y="248" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#1d4ed8">Data Generation</text>
+  <rect x="440" y="200" width="220" height="110" rx="16" fill="#dcfce7"/>
+  <text x="485" y="248" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#15803d">S3 + Parquet</text>
+  <rect x="740" y="200" width="220" height="110" rx="16" fill="#fef3c7"/>
+  <text x="790" y="248" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#b45309">Athena Queries</text>
+  <rect x="440" y="390" width="220" height="110" rx="16" fill="#fce7f3"/>
+  <text x="480" y="438" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#be185d">QuickSight Dashboards</text>
+  <path d="M360 255 L440 255" stroke="#64748b" stroke-width="4" fill="none"/>
+  <path d="M660 255 L740 255" stroke="#64748b" stroke-width="4" fill="none"/>
+  <path d="M550 310 L550 390" stroke="#64748b" stroke-width="4" fill="none"/>
+</svg>

@@ -1,27 +1,24 @@
-# Screenshots
+# Reporting Assets
 
-This directory is reserved for dashboard and pipeline screenshots.
+This directory contains screenshots referenced throughout the project documentation. These screenshots support the documentation by illustrating the reporting workflow, AWS services, and executive dashboards generated after deployment.
 
-## How to Add Screenshots
-
-After completing the AWS setup and building the QuickSight dashboards, capture and save screenshots here:
+## Expected Screenshots
 
 | File | Description |
 |---|---|
-| `executive_dashboard_overview.png` | Full Executive Dashboard showing all KPI cards and visuals |
-| `executive_dashboard_trend.png` | Monthly Revenue + Gross Profit combo chart |
-| `regional_dashboard_heatmap.png` | Region × Category profitability heatmap |
-| `regional_dashboard_market_share.png` | Stacked area chart showing regional market share over time |
-| `customer_dashboard_rfm.png` | RFM Bubble Chart with segment labels |
-| `customer_dashboard_cohort.png` | Cohort retention heatmap |
-| `athena_query_editor.png` | Athena Query Editor showing a KPI query and results |
-| `glue_catalog.png` | Glue Data Catalog showing the `sales` database and tables |
-| `s3_bucket_structure.png` | S3 bucket showing partitioned Parquet directory structure |
+| `executive_dashboard_mockup.png` | Conceptual mockup of the executive dashboard layout and KPI arrangement. |
+| `monthly_revenue_mockup.png` | Conceptual mockup of the monthly revenue and gross profit trend view. |
+| `regional_profitability_mockup.png` | Conceptual mockup of the regional profitability heatmap. |
+| `customer_rfm_mockup.png` | Conceptual mockup of the customer RFM segmentation view. |
+| `athena_query_mockup.png` | Conceptual mockup of the Athena query workflow and result layout. |
 
-## Screenshot Tips
+## Image Guidelines
 
-- Use 2560×1440 or 1920×1080 resolution for clarity
-- Obscure any AWS account IDs or internal URLs before committing
-- Save as PNG for lossless quality
+- Capture screenshots at 1920×1080 resolution or higher.
+- Remove AWS account IDs, usernames, or other sensitive information before committing screenshots to the repository.
+- Save images as PNG to preserve readability.
+- Ensure screenshots correspond to the dashboards and workflows described throughout the repository.
 
-> **Note:** Screenshots are not included in this repository because the pipeline uses synthetic data and requires an AWS account to deploy. Follow the [Setup Guide](../docs/aws_setup.md) to run the pipeline and generate your own screenshots for your portfolio.
+> Dashboard screenshots are intentionally excluded from version control because this project is designed to be deployed in an AWS environment using synthetic data. After deployment, generate screenshots from your own environment and place them in this directory to match the documentation throughout the repository.
+
+> Illustrative reporting layout based on the documented dashboard specification. Not an exported Amazon QuickSight dashboard.

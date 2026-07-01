@@ -1,7 +1,7 @@
 # KPI Definitions
 
 Canonical definitions for all metrics used across dashboards and SQL queries.
-These definitions are the single source of truth — any deviation in a report
+These definitions are the single source of truth — any deviation in a dashboard
 should be flagged as a data quality issue, not treated as an alternate view.
 
 ---

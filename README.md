@@ -1,11 +1,13 @@
-# aws-athena-quicksight-sales-analytics
+# AWS Athena QuickSight Sales Reporting Platform
 
 [![AWS](https://img.shields.io/badge/AWS-Athena%20%7C%20S3%20%7C%20Glue%20%7C%20QuickSight-orange?logo=amazonaws)](https://aws.amazon.com/)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)](https://www.python.org/)
 [![SQL](https://img.shields.io/badge/SQL-Presto%2FTrino-lightgrey)](https://prestodb.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-A production-quality Business Intelligence pipeline built on AWS — using Amazon S3, AWS Glue, Amazon Athena, and Amazon QuickSight — to deliver executive-level sales analytics from a synthetic public dataset.
+A production-style Business Intelligence reporting system built on AWS using Amazon S3, AWS Glue, Amazon Athena, and Amazon QuickSight to transform operational sales data into governed analytical datasets for executive reporting and business decision-making.
+
+The project demonstrates a serverless BI workflow covering data preparation, catalog management, analytical SQL, and executive reporting using synthetic data.
 
 ---
 
@@ -17,7 +19,7 @@ This repository demonstrates an end-to-end BI engineering workflow:
 2. **Data lake storage** — partitioned Parquet files on Amazon S3
 3. **Catalog & schema** — AWS Glue Data Catalog with external Athena tables
 4. **Analytical SQL** — KPIs, segmentation, ranking, window functions, data quality
-5. **Dashboards** — fully specified QuickSight dashboards (executive, regional, customer)
+5. **Dashboards** — fully specified QuickSight dashboards for executive, regional, and customer audiences
 
 All data is synthetic and reproducible. No proprietary or confidential information is used.
 
@@ -25,15 +27,11 @@ All data is synthetic and reproducible. No proprietary or confidential informati
 
 ## Business Context
 
-A retail company sells products across multiple regions. Business stakeholders need:
+A fictional retail organization operates across multiple regions and product categories. Business teams rely on recurring sales reports to monitor revenue performance, customer purchasing behavior, regional trends, and product performance.
 
-- Visibility into monthly and quarterly revenue trends
-- Regional performance comparisons
-- Customer lifetime value and segmentation
-- Product profitability ranking
-- Data quality monitoring
+As transaction volume grows, manually reconciling reports across spreadsheets becomes difficult and inconsistent. Different reporting teams may calculate the same business metric differently, reducing confidence in executive reporting.
 
-This pipeline answers those questions at scale using serverless AWS infrastructure, keeping infrastructure costs near zero on small datasets and scaling cost-linearly to petabyte workloads.
+This reporting system demonstrates how a serverless AWS architecture can standardize business metrics by transforming operational sales data into governed analytical datasets that support consistent reporting in Amazon QuickSight.
 
 ---
 
@@ -60,11 +58,20 @@ This pipeline answers those questions at scale using serverless AWS infrastructu
                             ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                   Amazon QuickSight                         │
-│   SPICE → Executive / Regional / Customer Dashboards        │
+│   SPICE → Executive / Regional / Customer dashboards        │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-See [`architecture/`](architecture/) for the draw.io XML and full diagram description.
+See [architecture/](architecture/) for the draw.io XML and full diagram description.
+
+---
+
+## Design Decisions
+
+- Amazon Athena was selected to separate storage from compute and support serverless SQL querying.
+- Parquet was chosen to reduce storage size and improve analytical query performance.
+- AWS Glue Data Catalog provides centralized schema management for Athena.
+- Amazon QuickSight consumes curated datasets for executive reporting instead of querying raw operational data directly.
 
 ---
 
@@ -82,10 +89,10 @@ See [`architecture/`](architecture/) for the draw.io XML and full diagram descri
 
 ---
 
-## Data Pipeline
+## Reporting Workflow
 
 ```
-[Python: generate_datasets.py]
+[Python: generate_data.py]
         │
         ▼
 [S3: raw/customers/, raw/products/, raw/sales_transactions/]
@@ -103,7 +110,7 @@ See [`architecture/`](architecture/) for the draw.io XML and full diagram descri
 [Athena: 01_create_database → 02_create_external_tables → 03_validation → ...]
         │
         ▼
-[QuickSight SPICE Dataset → Dashboards]
+[QuickSight SPICE Dataset → dashboards]
 ```
 
 ---
@@ -120,10 +127,10 @@ aws-athena-quicksight-sales-analytics/
 ├── architecture/                    # Diagrams and architecture docs
 │   ├── architecture.drawio          # draw.io XML source
 │   ├── architecture_description.md  # Narrative explanation
-│   └── aws_resource_map.md          # AWS resource inventory
+│   └── aws_service_mapping.md      # AWS resource inventory
 │
-├── datasets/                        # Synthetic data generation
-│   └── generate_datasets.py
+├── data/                            # Synthetic data generation and raw outputs
+│   └── generate_data.py
 │
 ├── athena/                          # SQL queries (numbered execution order)
 │   ├── 01_create_database.sql
@@ -145,9 +152,10 @@ aws-athena-quicksight-sales-analytics/
 │
 ├── docs/                            # Full documentation
 │   ├── business_problem.md
-│   ├── architecture_workflow.md
+│   ├── reporting_workflow.md
 │   ├── aws_setup.md
-│   ├── dashboard_storytelling.md
+│   ├── executive_reporting.md
+│   ├── design_decisions.md
 │   ├── lessons_learned.md
 │   ├── interview_questions.md
 │   ├── data_dictionary.md
@@ -162,10 +170,15 @@ aws-athena-quicksight-sales-analytics/
 │   ├── validate_dataset.py
 │   └── generate_summary.py
 │
-├── assets/                          # Logos, icons, brand assets
-│   └── README.md
+├── assets/                          # Logos, icons, and architecture visuals
+│   ├── architecture.svg
+│   └── logo.svg
 │
-├── screenshots/                     # Dashboard screenshots
+├── reporting/                       # Leadership-facing reporting artifacts
+│   ├── executive_summary.md
+│   └── weekly_business_review.md
+│
+├── screenshots/                     # Real screenshots captured from your deployed AWS environment
 │   └── README.md
 │
 └── outputs/                         # Query result samples
@@ -257,7 +270,7 @@ ORDER BY ltv_rank;
 
 ## Dashboard Preview
 
-> **Note:** Screenshots are not included in this repository. Run the pipeline end-to-end and connect QuickSight to view dashboards. See [`quicksight/`](quicksight/) for full visual specifications.
+> **Note:** Screenshots are not included in this repository. Run the reporting-system end-to-end and connect QuickSight to view executive reportings. See [`quicksight/`](quicksight/) for full visual specifications.
 
 | Dashboard | Key Visuals |
 |---|---|
@@ -269,7 +282,7 @@ ORDER BY ltv_rank;
 
 ## Key Business Insights
 
-The following insights are reproducible after running the full pipeline:
+The following insights are reproducible after running the full reporting-system:
 
 - **Top 20% of customers generate ~65% of revenue** (Pareto distribution built into synthetic data)
 - **Q4 (Oct–Dec) accounts for ~35% of annual revenue** — driven by seasonal promotions
@@ -294,8 +307,8 @@ No AWS account is required to run data generation, cleaning, validation, or note
 ### 1. Local Environment
 
 ```bash
-git clone https://github.com/your-username/aws-athena-quicksight-sales-analytics.git
-cd aws-athena-quicksight-sales-analytics
+git clone https://github.com/your-username/aws-athena-quicksight-sales-business reporting.git
+cd aws-athena-quicksight-sales-business reporting
 python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
@@ -319,13 +332,13 @@ python python/generate_summary.py
 ### 4. Upload to S3
 
 ```bash
-aws s3 sync data/processed/ s3://YOUR-BUCKET/sales-analytics/processed/
+aws s3 sync data/processed/ s3://YOUR-BUCKET/sales-business reporting/processed/
 ```
 
 ### 5. AWS Glue
 
 - Create a Glue database named `sales`
-- Run a Glue crawler on `s3://YOUR-BUCKET/sales-analytics/processed/`
+- Run a Glue crawler on `s3://YOUR-BUCKET/sales-business reporting/processed/`
 - Verify tables appear in the Data Catalog
 
 ### 6. Athena
@@ -337,7 +350,7 @@ aws s3 sync data/processed/ s3://YOUR-BUCKET/sales-analytics/processed/
 
 - Create a new dataset using Athena as source
 - Select the `sales` database
-- Follow specifications in `quicksight/` to build dashboards
+- Follow the dashboard specifications in `quicksight/` to build the reporting views
 
 ---
 
@@ -357,7 +370,7 @@ aws s3 sync data/processed/ s3://YOUR-BUCKET/sales-analytics/processed/
 - [ ] Add dbt models for transformation layer
 - [ ] Implement column-level data lineage with AWS Lake Formation
 - [ ] Add row-level security in QuickSight for regional managers
-- [ ] CI/CD pipeline for SQL linting and regression tests (SQLFluff + GitHub Actions)
+- [ ] CI/CD reporting-system for SQL linting and regression tests (SQLFluff + GitHub Actions)
 - [ ] Add Terraform IaC for reproducible AWS infrastructure
 
 ---
