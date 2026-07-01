@@ -1,6 +1,6 @@
 -- =============================================================================
 -- 10_window_functions.sql
--- Purpose : Showcase production-grade analytical window functions:
+-- Purpose : Analytical reporting queries demonstrating production-style use of SQL window functions:
 --           running totals, rankings, moving averages, percentiles, NTILE.
 -- =============================================================================
 

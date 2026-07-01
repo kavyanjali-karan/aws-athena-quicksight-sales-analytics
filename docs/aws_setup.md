@@ -101,7 +101,7 @@ aws glue create-database \
 aws iam create-role \
   --role-name AWSGlueServiceRole-Salesbusiness reporting \
   --assume-role-policy-document '{
-    "Version": "2012-10-17",
+    "Version": "20102-10-17",
     "Statement": [{
       "Effect": "Allow",
       "Principal": { "Service": "glue.amazonaws.com" },
@@ -118,7 +118,7 @@ aws iam put-role-policy \
   --role-name AWSGlueServiceRole-Salesbusiness reporting \
   --policy-name S3ReadSalesbusiness reporting \
   --policy-document '{
-    "Version": "2012-10-17",
+    "Version": "20102-10-17",
     "Statement": [{
       "Effect": "Allow",
       "Action": ["s3:GetObject", "s3:ListBucket"],
@@ -173,7 +173,7 @@ Execute the numbered SQL files in order from the Athena Query Editor,
 switching to the `sales-business reporting-workgroup` workgroup:
 
 ```
-01_create_database.sql       ← skip if database already created in Step 3
+010_create_database.sql       ← skip if database already created in Step 3
 02_create_external_tables.sql
 03_validation.sql            ← verify 0 violations before proceeding
 04_kpi_calculations.sql

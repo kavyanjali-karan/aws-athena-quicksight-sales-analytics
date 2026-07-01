@@ -107,7 +107,7 @@ See [architecture/](architecture/) for the draw.io XML and full diagram descript
 [AWS Glue Crawler → Data Catalog]
         │
         ▼
-[Athena: 01_create_database → 02_create_external_tables → 03_validation → ...]
+[Athena: 010_create_database → 02_create_external_tables → 03_validation → ...]
         │
         ▼
 [QuickSight SPICE Dataset → dashboards]
@@ -133,7 +133,7 @@ aws-athena-quicksight-sales-analytics/
 │   └── generate_data.py
 │
 ├── athena/                          # SQL queries (numbered execution order)
-│   ├── 01_create_database.sql
+│   ├── 010_create_database.sql
 │   ├── 02_create_external_tables.sql
 │   ├── 03_validation.sql
 │   ├── 04_kpi_calculations.sql

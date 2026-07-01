@@ -77,7 +77,7 @@ Local / Lambda
     │
     └── AWS Glue (optional crawler) → Glue Data Catalog
             │
-            └── Amazon Athena (SQL queries 01–11)
+            └── Amazon Athena (SQL queries 010–11)
                     │
                     └── SPICE Dataset → Amazon QuickSight executive reportings
 ```

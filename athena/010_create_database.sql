@@ -1,5 +1,5 @@
 -- =============================================================================
--- 01_create_database.sql
+-- 010_create_database.sql
 -- Purpose : Create the Athena database (Glue Data Catalog database).
 -- Run     : Amazon Athena Query Editor
 -- Note    : Replace YOUR-BUCKET with your actual S3 bucket name.

@@ -11,7 +11,7 @@ USE sales;
 SELECT
     year,
     month,
-    DATE_FORMAT(DATE(CONCAT(CAST(year AS VARCHAR), '-', LPAD(CAST(month AS VARCHAR), 2, '0'), '-01')), '%Y-%m') AS month_label,
+    DATE_FORMAT(DATE(CONCAT(CAST(year AS VARCHAR), '-', LPAD(CAST(month AS VARCHAR), 2, '0'), '-010')), '%Y-%m') AS month_label,
     ROUND(SUM(net_revenue), 2)                AS monthly_revenue,
     COUNT(DISTINCT transaction_id)            AS order_count,
     COUNT(DISTINCT customer_id)               AS unique_customers,
