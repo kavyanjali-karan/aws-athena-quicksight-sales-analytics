@@ -1,7 +1,7 @@
 """
 clean_sales_data.py
 -------------------
-Reads raw CSV datasets, applies production-quality cleaning rules,
+Reads raw CSV datasets, applies production-style cleaning rules,
 and writes cleaned Parquet files to data/processed/.
 
 Cleaning steps applied:
@@ -286,7 +286,7 @@ def main(input_dir: str, output_dir: str) -> None:
         log.error("Input directory '%s' does not exist. Run generate_datasets.py first.", inp)
         raise SystemExit(1)
 
-    log.info("=== Starting data cleaning pipeline ===")
+    log.info("=== Starting data cleaning reporting-system ===")
 
     customers = clean_customers(inp / "customers.csv")
     products = clean_products(inp / "products.csv")
@@ -302,7 +302,7 @@ def main(input_dir: str, output_dir: str) -> None:
         transactions, out, "sales_transactions", partition_cols=["year", "month"]
     )
 
-    log.info("=== Cleaning pipeline complete ===")
+    log.info("=== Cleaning reporting-system complete ===")
 
 
 if __name__ == "__main__":

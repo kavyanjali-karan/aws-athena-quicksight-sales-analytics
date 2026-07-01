@@ -1,17 +1,16 @@
 # AWS Setup Guide
 
 Complete, step-by-step instructions for provisioning the AWS infrastructure
-required to run this BI pipeline end-to-end.
+required to run this BI reporting-system end-to-end.
 
-Prerequisites: AWS CLI installed and configured with an IAM user or role with
-`AdministratorAccess` (or a scoped policy covering S3, Glue, Athena, and QuickSight).
+Prerequisites: AWS CLI installed and configured with an IAM user or role using least-privilege access for S3, Glue, Athena, and QuickSight.
 
 ---
 
 ## Step 1 — Create the S3 Bucket
 
 ```bash
-# Replace YOUR-BUCKET with a globally unique name (e.g. acme-sales-analytics-2024)
+# Replace YOUR-BUCKET with a globally unique name (e.g. acme-sales-business reporting-2024)
 BUCKET_NAME="YOUR-BUCKET"
 REGION="us-east-1"
 
@@ -54,7 +53,7 @@ aws s3api put-bucket-lifecycle-configuration \
 
 ## Step 2 — Upload Processed Data to S3
 
-After running the Python pipeline locally:
+After running the Python reporting-system locally:
 
 ```bash
 # Run data generation and cleaning
@@ -63,12 +62,12 @@ python python/clean_sales_data.py
 python python/validate_dataset.py
 
 # Sync processed Parquet files to S3
-aws s3 sync data/processed/ "s3://$BUCKET_NAME/sales-analytics/processed/" \
+aws s3 sync data/processed/ "s3://$BUCKET_NAME/sales-business reporting/processed/" \
   --storage-class STANDARD \
   --exclude "*.DS_Store"
 
 # Verify upload
-aws s3 ls "s3://$BUCKET_NAME/sales-analytics/processed/" --recursive --human-readable
+aws s3 ls "s3://$BUCKET_NAME/sales-business reporting/processed/" --recursive --human-readable
 ```
 
 ---
@@ -79,8 +78,8 @@ aws s3 ls "s3://$BUCKET_NAME/sales-analytics/processed/" --recursive --human-rea
 aws glue create-database \
   --database-input '{
     "Name": "sales",
-    "Description": "Sales analytics data lake — customers, products, transactions",
-    "LocationUri": "s3://YOUR-BUCKET/sales-analytics/"
+    "Description": "Sales business reporting data lake — customers, products, transactions",
+    "LocationUri": "s3://YOUR-BUCKET/sales-business reporting/"
   }'
 ```
 
@@ -100,7 +99,7 @@ aws glue create-database \
 ```bash
 # Create IAM role for the crawler (attach AWSGlueServiceRole managed policy)
 aws iam create-role \
-  --role-name AWSGlueServiceRole-SalesAnalytics \
+  --role-name AWSGlueServiceRole-Salesbusiness reporting \
   --assume-role-policy-document '{
     "Version": "2012-10-17",
     "Statement": [{
@@ -111,13 +110,13 @@ aws iam create-role \
   }'
 
 aws iam attach-role-policy \
-  --role-name AWSGlueServiceRole-SalesAnalytics \
+  --role-name AWSGlueServiceRole-Salesbusiness reporting \
   --policy-arn arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
 
 # Add S3 read permission for the bucket
 aws iam put-role-policy \
-  --role-name AWSGlueServiceRole-SalesAnalytics \
-  --policy-name S3ReadSalesAnalytics \
+  --role-name AWSGlueServiceRole-Salesbusiness reporting \
+  --policy-name S3ReadSalesbusiness reporting \
   --policy-document '{
     "Version": "2012-10-17",
     "Statement": [{
@@ -125,26 +124,26 @@ aws iam put-role-policy \
       "Action": ["s3:GetObject", "s3:ListBucket"],
       "Resource": [
         "arn:aws:s3:::YOUR-BUCKET",
-        "arn:aws:s3:::YOUR-BUCKET/sales-analytics/processed/*"
+        "arn:aws:s3:::YOUR-BUCKET/sales-business reporting/processed/*"
       ]
     }]
   }'
 
 # Create the crawler
 aws glue create-crawler \
-  --name sales-analytics-crawler \
-  --role AWSGlueServiceRole-SalesAnalytics \
+  --name sales-business reporting-crawler \
+  --role AWSGlueServiceRole-Salesbusiness reporting \
   --database-name sales \
   --targets '{
     "S3Targets": [
-      { "Path": "s3://YOUR-BUCKET/sales-analytics/processed/sales_transactions/" }
+      { "Path": "s3://YOUR-BUCKET/sales-business reporting/processed/sales_transactions/" }
     ]
   }' \
   --schedule "cron(0 5 * * ? *)" \
   --schema-change-policy '{"UpdateBehavior": "UPDATE_IN_DATABASE", "DeleteBehavior": "LOG"}'
 
 # Run the crawler immediately
-aws glue start-crawler --name sales-analytics-crawler
+aws glue start-crawler --name sales-business reporting-crawler
 ```
 
 ---
@@ -153,7 +152,7 @@ aws glue start-crawler --name sales-analytics-crawler
 
 ```bash
 aws athena create-work-group \
-  --name sales-analytics-workgroup \
+  --name sales-business reporting-workgroup \
   --configuration '{
     "ResultConfiguration": {
       "OutputLocation": "s3://YOUR-BUCKET/athena-results/",
@@ -163,7 +162,7 @@ aws athena create-work-group \
     "PublishCloudWatchMetricsEnabled": true,
     "BytesScannedCutoffPerQuery": 10737418240
   }' \
-  --description "Sales analytics workgroup with 10GB per-query limit"
+  --description "Sales business reporting workgroup with 10GB per-query limit"
 ```
 
 ---
@@ -171,7 +170,7 @@ aws athena create-work-group \
 ## Step 7 — Run Athena SQL Files
 
 Execute the numbered SQL files in order from the Athena Query Editor,
-switching to the `sales-analytics-workgroup` workgroup:
+switching to the `sales-business reporting-workgroup` workgroup:
 
 ```
 01_create_database.sql       ← skip if database already created in Step 3
@@ -194,9 +193,9 @@ switching to the `sales-analytics-workgroup` workgroup:
 1. Open **Amazon QuickSight** → Manage QuickSight → Security & permissions.
 2. Grant QuickSight access to **Amazon Athena** and the `YOUR-BUCKET` S3 bucket.
 3. In QuickSight → Datasets → New dataset → **Athena** data source.
-4. Data source name: `SalesAthena`; Athena workgroup: `sales-analytics-workgroup`.
+4. Data source name: `SalesAthena`; Athena workgroup: `sales-business reporting-workgroup`.
 5. Select database: `sales`; table: `sales_transactions`.
-6. Choose **Import to SPICE for quicker analytics**.
+6. Choose **Import to SPICE for quicker business reporting**.
 7. Repeat for `customers` and `products` tables.
 8. Build calculated fields as described in `quicksight/executive_dashboard.md`.
 
@@ -213,9 +212,9 @@ In QuickSight → Datasets → select dataset → **Scheduled refresh**:
 
 ## Verification Checklist
 
-- [ ] `aws s3 ls s3://YOUR-BUCKET/sales-analytics/processed/` shows three directories
+- [ ] `aws s3 ls s3://YOUR-BUCKET/sales-business reporting/processed/` shows three directories
 - [ ] `SHOW TABLES IN sales;` in Athena returns `customers`, `products`, `sales_transactions`
 - [ ] `SELECT COUNT(*) FROM sales.sales_transactions;` returns ~50,000
 - [ ] `03_validation.sql` produces 0 violations
 - [ ] QuickSight SPICE dataset shows "Import complete" status
-- [ ] Executive Dashboard KPI cards load within 2 seconds
+- [ ] Executive dashboard KPI cards load within 2 seconds

@@ -25,7 +25,7 @@ Alphabetical reference of all terms, acronyms, and metric names used in this pro
 | **LPAD** | SQL string function to left-pad a string with a specified character (e.g., `LPAD('3', 2, '0')` → `'03'`). Used to build date strings. |
 | **LTV** | See *Customer LTV*. |
 | **Market Share %** | A region's revenue as a percentage of total revenue across all regions. |
-| **Medallion Pattern** | A data lake architecture with three quality layers: raw (bronze), processed (silver), and curated/aggregated (gold). |
+| **multi-layer reporting  Pattern** | A data lake architecture with three quality layers: raw (bronze), processed (silver), and analytical reporting/aggregated (gold). |
 | **MoM** | Month-over-Month — a comparison of a metric between one month and the immediately preceding month. |
 | **Monetary (M)** | In RFM: the total net revenue a customer has spent across all transactions. |
 | **MSCK REPAIR TABLE** | Athena command to scan an S3 location and register all Hive-partition directories into the Glue Catalog. |
@@ -42,7 +42,7 @@ Alphabetical reference of all terms, acronyms, and metric names used in this pro
 | **RFM** | Recency, Frequency, Monetary — a classic customer segmentation framework. Each dimension is scored 1–5; higher is better. |
 | **RLS** | Row-Level Security — a QuickSight feature that restricts which rows of data each user or group can see. |
 | **Running Total** | A cumulative sum computed using a window function `SUM(...) OVER (ORDER BY ... ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)`. |
-| **SPICE** | Super-fast, Parallel, In-memory Calculation Engine — QuickSight's managed in-memory data store. SPICE enables sub-second dashboard rendering without querying Athena on every page load. |
+| **SPICE** | Super-fast, Parallel, In-memory Calculation Engine — QuickSight's managed in-memory data store. SPICE enables sub-second executive reporting rendering without querying Athena on every page load. |
 | **SSE-S3** | Server-Side Encryption with Amazon S3-managed keys — default encryption for S3 objects. |
 | **Sub-Category** | A finer classification within a product Category (e.g., `Technology > Phones`). |
 | **Unit Cost** | The cost of goods sold per individual unit, sourced from the `products` table. |

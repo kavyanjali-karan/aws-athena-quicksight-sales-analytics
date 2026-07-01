@@ -158,7 +158,7 @@ WHERE NOT REGEXP_LIKE(email, '^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$')
 LIMIT 50;
 
 -- ---------------------------------------------------------------------------
--- DQ-10  Summary scorecard (one row per check — useful for monitoring dashboards)
+-- DQ-10  Summary scorecard (one row per check — useful for monitoring executive reportings)
 -- ---------------------------------------------------------------------------
 SELECT
     check_name,

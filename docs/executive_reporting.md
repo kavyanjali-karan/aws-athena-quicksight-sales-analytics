@@ -1,15 +1,15 @@
-# Dashboard Storytelling Guide
+# Executive Reporting Guide
 
-How to present the three dashboards to business stakeholders — the narrative
-arc, key insights to highlight, and how to navigate the drill-down paths.
+How to present the three reporting views to business stakeholders — the executive summary,
+key insights to highlight, and how to navigate the drill-down paths.
 
 ---
 
-## Dashboard 1: Executive Dashboard
+## executive reporting 1: Executive executive reporting
 
-### Narrative
+### Executive Summary
 
-> "This dashboard gives leadership a single place to answer: Are we growing?  
+> "This executive reporting gives leadership a single place to answer: Are we growing?  
 > Where is the money coming from? And are we making money on it?"
 
 ### Recommended Walkthrough (5-minute demo)
@@ -30,11 +30,11 @@ arc, key insights to highlight, and how to navigate the drill-down paths.
 
 ---
 
-## Dashboard 2: Regional Dashboard
+## executive reporting 2: Regional executive reporting
 
-### Narrative
+### Executive Summary
 
-> "Each region operates like a mini-business. This dashboard helps us compare them  
+> "Each region operates like a mini-business. This executive reporting helps us compare them  
 > apples-to-apples and ask: which regions deserve more investment?"
 
 ### Recommended Walkthrough
@@ -51,11 +51,11 @@ arc, key insights to highlight, and how to navigate the drill-down paths.
 
 ---
 
-## Dashboard 3: Customer Dashboard
+## executive reporting 3: Customer executive reporting
 
-### Narrative
+### Executive Summary
 
-> "Our customers are not all equal. This dashboard helps us find our best customers,  
+> "Our customers are not all equal. This executive reporting helps us find our best customers,  
 > protect them, and identify who we're about to lose."
 
 ### Recommended Walkthrough
@@ -89,7 +89,7 @@ arc, key insights to highlight, and how to navigate the drill-down paths.
 
 Always communicate the data freshness to stakeholders:
 
-> "Data in this dashboard is refreshed daily at 6:00 AM UTC.  
+> "Data in this executive reporting is refreshed daily at 6:00 AM UTC.  
 > Yesterday's transactions are visible. Today's orders will appear tomorrow morning."
 
 This sets correct expectations and prevents confusion when a deal closed today doesn't appear yet.

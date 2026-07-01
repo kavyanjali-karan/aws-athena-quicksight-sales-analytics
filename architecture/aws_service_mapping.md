@@ -1,7 +1,7 @@
 # AWS Resource Map
 
 All resources listed below should be created in a single AWS region (e.g. `us-east-1`).
-Replace `YOUR-ACCOUNT-ID` and `YOUR-BUCKET` throughout.
+Replace `<Account ID>` and `YOUR-BUCKET` throughout.
 
 ---
 
@@ -9,9 +9,9 @@ Replace `YOUR-ACCOUNT-ID` and `YOUR-BUCKET` throughout.
 
 | Bucket / Prefix | Purpose | Retention |
 |---|---|---|
-| `s3://YOUR-BUCKET/sales-analytics/processed/customers/` | Cleaned customer Parquet | Indefinite |
-| `s3://YOUR-BUCKET/sales-analytics/processed/products/` | Cleaned product Parquet | Indefinite |
-| `s3://YOUR-BUCKET/sales-analytics/processed/sales_transactions/year=*/month=*/` | Transaction Parquet (partitioned) | Indefinite |
+| `s3://YOUR-BUCKET/sales-business reporting/processed/customers/` | Cleaned customer Parquet | Indefinite |
+| `s3://YOUR-BUCKET/sales-business reporting/processed/products/` | Cleaned product Parquet | Indefinite |
+| `s3://YOUR-BUCKET/sales-business reporting/processed/sales_transactions/year=*/month=*/` | Transaction Parquet (partitioned) | Indefinite |
 | `s3://YOUR-BUCKET/athena-results/` | Athena query output CSVs | 30-day lifecycle |
 
 **S3 Bucket settings:**
@@ -30,9 +30,9 @@ Replace `YOUR-ACCOUNT-ID` and `YOUR-BUCKET` throughout.
 | Table | `sales.customers` | External (Parquet) |
 | Table | `sales.products` | External (Parquet) |
 | Table | `sales.sales_transactions` | External, partitioned (Parquet) |
-| Crawler | `sales-analytics-crawler` | Glue Crawler |
+| Crawler | `sales-business reporting-crawler` | Glue Crawler |
 | Crawler schedule | `cron(0 5 * * ? *)` | Daily at 05:00 UTC |
-| Crawler role | `AWSGlueServiceRole-SalesAnalytics` | IAM Role |
+| Crawler role | `AWSGlueServiceRole-Salesbusiness reporting` | IAM Role |
 
 ---
 
@@ -40,7 +40,7 @@ Replace `YOUR-ACCOUNT-ID` and `YOUR-BUCKET` throughout.
 
 | Resource | Name | Notes |
 |---|---|---|
-| Workgroup | `sales-analytics-workgroup` | Separate from primary workgroup |
+| Workgroup | `sales-business reporting-workgroup` | Separate from primary workgroup |
 | Query result location | `s3://YOUR-BUCKET/athena-results/` | Set on workgroup |
 | Encryption | SSE-S3 | Encrypts query result files |
 | Data usage control | $10/month budget | CloudWatch alarm + SNS notification |
@@ -54,22 +54,22 @@ Replace `YOUR-ACCOUNT-ID` and `YOUR-BUCKET` throughout.
 | Dataset | `SalesTransactionsSpice` | SPICE (from Athena) |
 | Dataset | `CustomerSummarySpice` | SPICE (from Athena CTAS) |
 | Dataset | `RegionalPerformanceSpice` | SPICE (from Athena CTAS) |
-| Dashboard | `SalesAnalyticsExecutive` | QuickSight Dashboard |
-| Dashboard | `SalesAnalyticsRegional` | QuickSight Dashboard |
-| Dashboard | `SalesAnalyticsCustomer` | QuickSight Dashboard |
-| Analysis | `SalesAnalyticsAnalysis` | Shared analysis source |
+| executive reporting | `Salesbusiness reportingExecutive` | QuickSight executive reporting |
+| executive reporting | `Salesbusiness reportingRegional` | QuickSight executive reporting |
+| executive reporting | `Salesbusiness reportingCustomer` | QuickSight executive reporting |
+| Analysis | `Salesbusiness reportingAnalysis` | Shared analysis source |
 | Refresh schedule | Daily at 06:00 UTC | Full SPICE refresh |
 
 **QuickSight permissions:**
-- Author: BI engineers, dashboard developers
+- Author: BI engineers, executive reporting developers
 - Reader: business stakeholders (per-seat pricing or session pricing)
-- Row-level security: enabled for Regional Dashboard (managers see only their region)
+- Row-level security: enabled for Regional executive reporting (managers see only their region)
 
 ---
 
 ## IAM Roles and Policies
 
-### `SalesAnalyticsAthenaRole`
+### `Salesbusiness reportingAthenaRole`
 
 Used by QuickSight to query Athena.
 
@@ -85,15 +85,15 @@ Used by QuickSight to query Athena.
         "athena:GetQueryResults",
         "athena:StopQueryExecution"
       ],
-      "Resource": "arn:aws:athena:us-east-1:YOUR-ACCOUNT-ID:workgroup/sales-analytics-workgroup"
+      "Resource": "arn:aws:athena:us-east-1:<Account ID>:workgroup/sales-business reporting-workgroup"
     },
     {
       "Effect": "Allow",
       "Action": ["glue:GetDatabase", "glue:GetTable", "glue:GetPartitions", "glue:BatchGetPartition"],
       "Resource": [
-        "arn:aws:glue:us-east-1:YOUR-ACCOUNT-ID:catalog",
-        "arn:aws:glue:us-east-1:YOUR-ACCOUNT-ID:database/sales",
-        "arn:aws:glue:us-east-1:YOUR-ACCOUNT-ID:table/sales/*"
+        "arn:aws:glue:us-east-1:<Account ID>:catalog",
+        "arn:aws:glue:us-east-1:<Account ID>:database/sales",
+        "arn:aws:glue:us-east-1:<Account ID>:table/sales/*"
       ]
     },
     {
@@ -101,7 +101,7 @@ Used by QuickSight to query Athena.
       "Action": ["s3:GetObject", "s3:ListBucket"],
       "Resource": [
         "arn:aws:s3:::YOUR-BUCKET",
-        "arn:aws:s3:::YOUR-BUCKET/sales-analytics/*"
+        "arn:aws:s3:::YOUR-BUCKET/sales-business reporting/*"
       ]
     },
     {
@@ -115,7 +115,7 @@ Used by QuickSight to query Athena.
 }
 ```
 
-### `AWSGlueServiceRole-SalesAnalytics`
+### `AWSGlueServiceRole-Salesbusiness reporting`
 
 Used by Glue Crawler.
 
@@ -128,7 +128,7 @@ Used by Glue Crawler.
       "Action": ["s3:GetObject", "s3:ListBucket"],
       "Resource": [
         "arn:aws:s3:::YOUR-BUCKET",
-        "arn:aws:s3:::YOUR-BUCKET/sales-analytics/processed/*"
+        "arn:aws:s3:::YOUR-BUCKET/sales-business reporting/processed/*"
       ]
     },
     {

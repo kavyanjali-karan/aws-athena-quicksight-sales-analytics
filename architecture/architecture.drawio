@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="draw.io" version="21.0.0" type="device">
-  <diagram name="AWS Sales Analytics Architecture" id="sales-analytics-arch">
+  <diagram name="AWS Sales business reporting Architecture" id="sales-business reporting-arch">
     <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
@@ -88,13 +88,13 @@
           <mxGeometry x="1060" y="100" width="130" height="45" as="geometry" />
         </mxCell>
 
-        <mxCell id="qs-exec" value="Executive Dashboard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+        <mxCell id="qs-exec" value="Executive executive reporting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
           <mxGeometry x="1060" y="165" width="130" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="qs-reg" value="Regional Dashboard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+        <mxCell id="qs-reg" value="Regional executive reporting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
           <mxGeometry x="1060" y="215" width="130" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="qs-cust" value="Customer Dashboard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+        <mxCell id="qs-cust" value="Customer executive reporting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
           <mxGeometry x="1060" y="265" width="130" height="40" as="geometry" />
         </mxCell>
 
@@ -139,7 +139,7 @@
         <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="athena" target="qs-spice" parent="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <!-- SPICE → Dashboards -->
+        <!-- SPICE → executive reportings -->
         <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="qs-spice" target="qs-exec" parent="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>

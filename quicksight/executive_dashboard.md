@@ -1,6 +1,6 @@
 # Executive Dashboard Specification
 
-## Purpose
+## Business Objective
 
 Provide C-suite and senior leadership with a single-page view of business health:
 total revenue, profitability, growth trends, and top-line regional and product performance.
@@ -27,7 +27,7 @@ SPICE refresh schedule: **Daily at 06:00 UTC**
 | Card | Metric | Calculation | Format |
 |---|---|---|---|
 | Total Revenue | `SUM(net_revenue)` for current year | Athena KPI 1 | `$X.XM` |
-| Gross Margin | `gross_profit / revenue × 100` | Athena KPI 1 | `XX.X%` |
+| Gross Margin | `gross_margin_pct` | Athena KPI 1 | `XX.X%` |
 | Total Orders | `COUNT(DISTINCT transaction_id)` | Athena KPI 1 | `X,XXX` |
 | Avg Order Value | `revenue / orders` | Athena KPI 1 | `$XXX.XX` |
 | YoY Growth | `(curr − prior) / prior × 100` | Athena KPI 3 | `+XX.X%` ▲ / `−XX.X%` ▼ |
@@ -41,6 +41,7 @@ All KPI cards show a comparison indicator (vs. prior year, same period).
 
 ### 1 — Monthly Revenue & Gross Profit Trend (Line + Bar Combo)
 
+- **Business question:** Is revenue on track versus the prior year, and which months are driving the change?
 - **Type:** Combo chart (bar = revenue, line = gross profit)
 - **X-axis:** Month label (`YYYY-MM`)
 - **Y-axis (left):** Net Revenue (USD)
@@ -50,6 +51,7 @@ All KPI cards show a comparison indicator (vs. prior year, same period).
 
 ### 2 — Regional Revenue Breakdown (Horizontal Bar Chart)
 
+- **Business question:** Which regions contribute the most revenue, and where are performance gaps emerging?
 - **Type:** Horizontal bar chart, sorted descending by revenue
 - **Dimension:** `region`
 - **Measure:** `SUM(net_revenue)`
@@ -59,14 +61,16 @@ All KPI cards show a comparison indicator (vs. prior year, same period).
 
 ### 3 — Revenue by Category (Donut Chart)
 
+- **Business question:** Which product categories account for the largest share of revenue and margin?
 - **Type:** Donut / pie chart
 - **Dimension:** `category`
 - **Measure:** `SUM(net_revenue)` (% of total)
 - **Legend:** Category names with revenue % labels
-- **Interaction:** Click slice → filter entire dashboard by category
+- **Interaction:** Click slice → filter the entire dashboard by category
 
 ### 4 — YoY Revenue Comparison (Grouped Bar Chart)
 
+- **Business question:** How did revenue trend by quarter across consecutive years?
 - **Type:** Grouped bar chart
 - **X-axis:** Year (2020, 2021, 2022, 2023)
 - **Bars:** Grouped by quarter (Q1–Q4)
@@ -75,6 +79,7 @@ All KPI cards show a comparison indicator (vs. prior year, same period).
 
 ### 5 — Top 10 Products by Revenue (Table Visual)
 
+- **Business question:** Which individual products drive the most revenue and margin?
 - **Type:** Table with conditional formatting
 - **Columns:** Rank, Product Name, Category, Revenue, Gross Profit, Margin %, Orders
 - **Conditional formatting:** Margin % → red (< 15%) / amber (15–25%) / green (> 25%)
@@ -82,6 +87,7 @@ All KPI cards show a comparison indicator (vs. prior year, same period).
 
 ### 6 — Discount Impact on Margin (Scatter Plot)
 
+- **Business question:** Are promotional discounts improving growth at the expense of margin?
 - **X-axis:** Average discount % per transaction bucket
 - **Y-axis:** Gross margin %
 - **Bubble size:** Order count
@@ -104,10 +110,10 @@ All KPI cards show a comparison indicator (vs. prior year, same period).
 ## Drill-Down Paths
 
 ```
-Dashboard level
+dashboard level
   └── Click month bar → Regional breakdown for that month
         └── Click region → City breakdown
-              └── Click city → Customer-level detail (Customer Dashboard)
+              └── Click city → Customer-level detail (Customer executive reporting)
   └── Click category slice → Category filtered view
         └── Click product name → Product detail sheet
 ```
@@ -129,7 +135,7 @@ Dashboard level
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│  [Logo]   Executive Sales Dashboard          [Filters: Year/Region] │
+│  [Logo]   Executive Sales Dashboard          [Filters: Year / Region / Category / Date Range] │
 ├────────┬────────┬────────┬────────┬────────┬────────────────────┤
 │Revenue │Margin  │ Orders │Avg AOV │YoY Grw │Unique Customers    │
 │ KPI ▲  │ KPI ▲  │ KPI ▲  │ KPI ▲  │ KPI ▲  │ KPI ▲              │

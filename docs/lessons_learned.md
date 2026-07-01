@@ -7,15 +7,13 @@ in a production engagement. Useful for interview discussions.
 
 ## What Worked Well
 
-### 1. Contract-First API (OpenAPI for SQL)
+### 1. Metric Contract First
 
-Defining the metric contract in `docs/kpi_definitions.md` before writing any SQL
+Defining the metric contract in `docs/kpi_definitions.md` before writing SQL
 eliminated the "two teams, two revenue numbers" problem. Every SQL file references
-the single canonical definition. This is the equivalent of API contract-first design —
-applied to BI metrics.
+the same canonical definition, which improves consistency across reporting outputs.
 
-**Interview talking point:** "On a past engagement I've seen teams waste weeks arguing about
-whose revenue number was right. The fix is treating metric definitions as a contract, not a convention."
+**Interview talking point:** "A common failure in BI projects is that each team defines the same KPI differently. The fix is to treat metric definitions as a contract, not as a convention."
 
 ---
 
@@ -23,7 +21,7 @@ whose revenue number was right. The fix is treating metric definitions as a cont
 
 Early tests against unpartitioned Parquet showed Athena scanning the full dataset for
 every date-filtered query. Adding `year/month` Hive partitions reduced scan volume by ~85%
-for typical dashboard queries (e.g., current-year filters) and cut per-query cost proportionally.
+for typical executive reporting queries (e.g., current-year filters) and cut per-query cost proportionally.
 
 **Lesson:** Always partition on the most common filter dimension. For time-series BI, that's almost always date.
 
@@ -31,9 +29,9 @@ for typical dashboard queries (e.g., current-year filters) and cut per-query cos
 
 ### 3. SPICE for Dashboard Latency
 
-Initial prototype connected QuickSight directly to Athena (Direct Query mode).
-Dashboard load times were 4–8 seconds per visual — unacceptable for a live demo.
-Switching to SPICE (in-memory cache) reduced load times to < 1 second.
+Initial prototypes connected QuickSight directly to Athena in Direct Query mode.
+Dashboard load times were slow enough to make the experience feel less polished for a live demo.
+Switching to SPICE reduced visual load times and made the reporting experience more usable for stakeholders.
 
 **Trade-off:** SPICE has a 500M row limit per dataset and requires a daily refresh cycle.
 For near-real-time reporting (< 1 hour freshness), Direct Query or a streaming ingestion
@@ -41,15 +39,15 @@ pattern (Kinesis → S3 → Athena) would be required.
 
 ---
 
-### 4. Data Validation as a Pipeline Gate
+### 4. Data Validation as a Reporting Gate
 
-Early versions of the pipeline had no validation step. A bug in date parsing caused
+Early versions of the reporting-system had no validation step. A bug in date parsing caused
 ~3% of transactions to have `ship_date < order_date`. This silently corrupted
 the "Avg Days to Ship" KPI.
 
 Adding `validate_dataset.py` as a mandatory gate caught this class of error before
-data reached Athena. The pipeline exits with a non-zero code on any validation failure,
-preventing corrupted data from reaching the dashboard.
+data reached Athena. The reporting-system exits with a non-zero code on any validation failure,
+preventing corrupted data from reaching the executive reporting.
 
 **Lesson:** Treat data validation like unit tests — required, not optional, and run in CI.
 
@@ -65,7 +63,7 @@ would replace these with dbt models:
 
 - `sources.yml` defines raw tables
 - `staging/` models clean and type-cast
-- `marts/` models define the final analytics tables
+- `marts/` models define the final business reporting tables
 - `schema.yml` tests enforce not-null, unique, and referential integrity
 
 dbt also generates documentation and lineage graphs, which stakeholders can self-serve.
@@ -102,24 +100,23 @@ IAM roles — would be defined in Terraform:
 
 QuickSight makes it easy to create new calculated fields without documenting
 where they come from. On a real project, I would add column-level lineage tracking
-(AWS Glue DataBrew or OpenMetadata) to ensure every dashboard metric traces back
+(AWS Glue DataBrew or OpenMetadata) to ensure every executive reporting metric traces back
 to a source column with a known owner.
 
 ---
 
 ### 5. Row-Level Security from Day 1
 
-The Regional Dashboard was spec'd with RLS from the start, but implementing it
+The Regional executive reporting was spec'd with RLS from the start, but implementing it
 after the fact required restructuring the QuickSight dataset. In production,
-design the RLS dataset mapping before building any dashboard that will be shared
+design the RLS dataset mapping before building any executive reporting that will be shared
 across roles with different data access rights.
 
 ---
 
 ## Interview Takeaways
 
-- **Data quality is not optional.** Caught and fixed a ship_date ordering bug that
-  would have corrupted a dashboard KPI. Validation as a pipeline gate is the fix.
+- **Data quality is not optional.** A ship_date ordering bug would have corrupted a reporting KPI if it had reached the downstream dataset. Validation as a reporting gate prevented that outcome.
 - **Serverless BI doesn't mean no engineering.** Partitioning, SPICE tuning, and
   CTAS materialization required deliberate engineering decisions to achieve performance targets.
 - **Metric contracts prevent stakeholder confusion.** Defining revenue in one place and

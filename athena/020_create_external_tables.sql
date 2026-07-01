@@ -24,7 +24,7 @@ CREATE EXTERNAL TABLE IF NOT EXISTS customers (
     segment      STRING    COMMENT 'Customer segment: Consumer | Corporate | Home Office'
 )
 STORED AS PARQUET
-LOCATION 's3://YOUR-BUCKET/sales-analytics/processed/customers/'
+LOCATION 's3://YOUR-BUCKET/sales-business reporting/processed/customers/'
 TBLPROPERTIES ('parquet.compress' = 'SNAPPY');
 
 -- ---------------------------------------------------------------------------
@@ -41,7 +41,7 @@ CREATE EXTERNAL TABLE IF NOT EXISTS products (
     margin_pct   DOUBLE    COMMENT 'Gross margin percentage [(price-cost)/price * 100]'
 )
 STORED AS PARQUET
-LOCATION 's3://YOUR-BUCKET/sales-analytics/processed/products/'
+LOCATION 's3://YOUR-BUCKET/sales-business reporting/processed/products/'
 TBLPROPERTIES ('parquet.compress' = 'SNAPPY');
 
 -- ---------------------------------------------------------------------------
@@ -64,7 +64,7 @@ PARTITIONED BY (
     month INT  COMMENT 'Order month — Hive partition key'
 )
 STORED AS PARQUET
-LOCATION 's3://YOUR-BUCKET/sales-analytics/processed/sales_transactions/'
+LOCATION 's3://YOUR-BUCKET/sales-business reporting/processed/sales_transactions/'
 TBLPROPERTIES ('parquet.compress' = 'SNAPPY');
 
 -- Register all existing partitions (run once after initial S3 upload, and after
