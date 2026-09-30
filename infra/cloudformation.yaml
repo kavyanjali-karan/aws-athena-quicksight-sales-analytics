@@ -1,0 +1,128 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  Cloud Sales Analytics Pipeline: S3 data lake, Glue Data Catalog crawler,
+  and Athena workgroup. Deploy-ready infrastructure for the curated sales
+  dataset produced by the PyArrow ETL.
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: sales-analytics
+    Description: Lowercase prefix for all resources.
+    AllowedPattern: '[a-z0-9-]+'
+  EnvironmentName:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - staging
+      - prod
+  DatabaseName:
+    Type: String
+    Default: sales_analytics_dev
+    Description: >-
+      Glue Data Catalog database that Athena queries. Underscore-only:
+      Athena resolves identifiers Hive-style, so dashes break qualified
+      references (and Glue's own auto-generated dashed names are not
+      Athena-compatible).
+    AllowedPattern: '[a-z0-9_]+'
+    MinLength: 1
+    MaxLength: 255
+
+Resources:
+  DataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${ProjectName}-${EnvironmentName}-${AWS::AccountId}'
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref EnvironmentName
+
+  GlueDatabase:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput:
+        Name: !Ref DatabaseName
+        Description: Data catalog for curated sales analytics tables.
+
+  GlueServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: glue.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+      Policies:
+        - PolicyName: data-bucket-access
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource: !Sub '${DataBucket.Arn}/*'
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource: !GetAtt DataBucket.Arn
+
+  SalesCrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name: !Sub '${ProjectName}-${EnvironmentName}-curated'
+      Role: !GetAtt GlueServiceRole.Arn
+      DatabaseName: !Ref GlueDatabase
+      Description: Catalogs the hive-partitioned Parquet written by the PyArrow ETL.
+      Targets:
+        S3Targets:
+          - Path: !Sub 's3://${DataBucket}/curated/sales/'
+      SchemaChangePolicy:
+        UpdateBehavior: UPDATE_IN_DATABASE
+        DeleteBehavior: LOG
+
+  AnalyticsWorkGroup:
+    Type: AWS::Athena::WorkGroup
+    Properties:
+      Name: !Sub '${ProjectName}-${EnvironmentName}'
+      Description: Curated sales analytics; query results land in S3.
+      State: ENABLED
+      RecursiveDeleteOption: true
+      WorkGroupConfiguration:
+        EnforceWorkGroupConfiguration: true
+        PublishCloudWatchMetricsEnabled: true
+        ResultConfiguration:
+          OutputLocation: !Sub 's3://${DataBucket}/athena-results/'
+
+Outputs:
+  BucketName:
+    Description: Upload the ETL output here.
+    Value: !Ref DataBucket
+  UploadCommand:
+    Description: Push the curated Parquet to S3.
+    Value: !Sub 'aws s3 cp data/curated/sales/ s3://${DataBucket}/curated/sales/ --recursive'
+  CrawlerName:
+    Description: Start this after each upload to register new partitions.
+    Value: !Ref SalesCrawler
+  AthenaDatabase:
+    Description: Pass this to run_athena_queries.py --database.
+    Value: !Ref GlueDatabase
+  AthenaWorkGroup:
+    Value: !Ref AnalyticsWorkGroup

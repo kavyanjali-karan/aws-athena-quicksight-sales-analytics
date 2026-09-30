@@ -17,9 +17,10 @@ env/
 .ipynb_checkpoints/
 *.ipynb_checkpoints
 
-# Data files (generated locally — do not commit raw data)
+# Regenerable data (deterministic: python data/generate_sales_data.py → python python/etl_pipeline.py)
 data/raw/
 data/processed/
+data/curated/
 outputs/*.csv
 outputs/*.parquet
 outputs/*.json

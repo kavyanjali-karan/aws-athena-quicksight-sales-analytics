@@ -1,1 +1,0 @@
-This directory contains static assets used throughout the repository, including architecture diagrams, dashboard previews, and supporting visuals referenced in the documentation.
