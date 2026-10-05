@@ -2,39 +2,43 @@
 
 [![AWS Analytics Pipeline](https://github.com/kavyanjali-karan/aws-athena-quicksight-sales-analytics/actions/workflows/ci.yml/badge.svg)](https://github.com/kavyanjali-karan/aws-athena-quicksight-sales-analytics/actions/workflows/ci.yml) [![tests: 19 passed](https://img.shields.io/badge/tests-19%20passed-2ea44f)](tests/) [![license: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-End-to-end sales analytics on AWS: a Python/PyArrow ETL cleans a messy,
-deliberately-defective 52,150-row **synthetic** export and writes
-hive-partitioned Parquet, Amazon Athena queries it, and QuickSight
-dashboards are scheduled for a daily refresh — replacing a
-3–4 hour manual reporting cycle with a pack that lands in under 15 minutes.
+Every month it was the same ritual: export the raw sales CSV, clean it by
+hand in a spreadsheet, pivot, paste into slides. Three to four hours, and
+the numbers were stale before anyone read them. This project replaces
+that ritual with a pipeline that runs itself: a Python/PyArrow ETL cleans
+a deliberately dirty 52,150-row **synthetic** export (duplicates, missing
+ids and negative amounts planted on purpose), writes hive-partitioned
+Parquet, and Amazon Athena queries the 52,000 clean rows. QuickSight
+dashboards refresh daily, so the pack that took 3–4 hours now lands in
+under 15 minutes.
 
-**Live dashboard:**
-[interactive sales dashboard](https://kavyanjali-karan.github.io/aws-athena-quicksight-sales-analytics/)
-— the same numbers as the Athena queries, rebuilt from this project's
-own pipeline and published from `assets/` by this repository's GitHub
-Pages workflow on every push.
+The [interactive sales
+dashboard](https://kavyanjali-karan.github.io/aws-athena-quicksight-sales-analytics/)
+is rebuilt from this project's own pipeline and published by the GitHub
+Pages workflow on every push, so it always shows what the Athena queries
+return.
 
-**What this project delivers:**
+What you'll find:
 
-- **Queried 50,000+ transactions in Athena SQL** to quantify sales
-  performance, revealing **Technology products generate 67.6% of income
-  ($33.06M of $48.9M)**. The query is
-  [`athena/queries/01_category_income.sql`](athena/queries/01_category_income.sql),
-  and its result is asserted by the test suite — not hand-typed.
-- **Automated data cleaning and partitioning with a Python/PyArrow ETL
-  workflow** — duplicates, missing customer ids, and invalid amounts are
-  dropped (52,150 raw rows → 52,000 clean), then written as
-  hive-partitioned Parquet ready for Athena.
-- **QuickSight dashboards with daily refreshes** (dataset, sheets, and
-  refresh schedule in [`quicksight/dashboard_spec.md`](quicksight/dashboard_spec.md))
-  that **cut manual reporting time from 3–4 hours to under 15 minutes**.
+- Three Athena SQL queries in [`athena/queries/`](athena/queries/)
+  covering income by category, a 24-month trend and a top-10 products
+  ranking. The headline one shows **Technology products generating 67.6%
+  of income ($33.06M of $48.9M)** across 50,000+ transactions, and the
+  test suite asserts that result rather than trusting a hand-typed
+  number
+  ([`athena/queries/01_category_income.sql`](athena/queries/01_category_income.sql)).
+- A PyArrow cleaning and partitioning step that drops exactly the planted
+  defects (52,150 raw rows → 52,000 clean) and writes hive-partitioned
+  Parquet ready for Athena.
+- The QuickSight wiring: dataset, sheets and the daily refresh schedule,
+  documented in [`quicksight/dashboard_spec.md`](quicksight/dashboard_spec.md).
 
 ## The AWS pipeline — what actually touches AWS
 
-This is not an architecture diagram only. Every AWS layer ships as
-executable code in this repository:
+Architecture diagrams are usually aspirational. Every layer in the one
+below is runnable code in this repository:
 
-| Artifact | What it really does |
+| Artifact | What it does |
 |---|---|
 | [`infra/cloudformation.yaml`](infra/cloudformation.yaml) | Real IaC: provisions the S3 data lake, Glue database + crawler, Athena workgroup, and IAM roles — validated by CI on every push |
 | [`python/run_athena_queries.py`](python/run_athena_queries.py) | boto3 session that applies [`athena/ddl.sql`](athena/ddl.sql) and executes all three KPI queries **against real Amazon Athena**, printing and saving the results |
@@ -63,11 +67,10 @@ products ranking (`athena/queries/02` and `03`).
 
 Rendered by [`python/render_previews.py`](python/render_previews.py),
 which executes the actual Athena query files against the curated
-Parquet — so these images show exactly what the SQL returns. The
-live interactive dashboard is built from the same queries by
+Parquet, so these images show exactly what the SQL returns. The live
+interactive dashboard is built from the same queries by
 [`python/generate_interactive_dashboard.py`](python/generate_interactive_dashboard.py).
-The
-QuickSight versions of these visuals live in an AWS account (spec:
+The QuickSight versions of these visuals live in an AWS account (spec:
 [`quicksight/dashboard_spec.md`](quicksight/dashboard_spec.md)).
 
 ![Income by category](assets/category_income.png)
