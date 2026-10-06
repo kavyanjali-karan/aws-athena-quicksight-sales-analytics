@@ -55,7 +55,7 @@ svg text{fill:var(--muted);font-size:11px;font-family:inherit}
 <body>
 <div class="wrap">
 <header>
-  <p style="margin:0 0 10px;font-size:13px"><a href="../interactive_dashboard.html" style="color:#1D4E89;text-decoration:none">&larr; KPI Governance dashboard</a></p>
+  <p style="margin:0 0 10px;font-size:13px"><a href="https://kavyanjali-karan.github.io/executive-kpi-governance-platform/interactive_dashboard.html" style="color:#1D4E89;text-decoration:none">&larr; KPI Governance dashboard</a></p>
   <h1>Cloud Sales Analytics</h1>
   <p id="sub"></p>
 </header>
