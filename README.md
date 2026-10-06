@@ -117,7 +117,7 @@ The QuickSight versions of these visuals live in an AWS account (spec:
 │   ├── run_athena_queries.py    boto3: apply DDL, run every query, print results
 │   └── schedule_quicksight_refresh.py   boto3: attach the daily SPICE refresh
 ├── .github/workflows/        CI (ETL + 19 tests + IaC validation) + Pages deploy
-├── assets/                      dashboard preview images + live HTML dashboard (regenerate any time)
+├── assets/                      dashboard preview images + live HTML dashboard (rebuilt by the scripts below)
 ├── athena/
 │   ├── ddl.sql                  external table over the Parquet layout
 │   └── queries/                 01 category income · 02 monthly trend · 03 top products
@@ -133,7 +133,7 @@ pip install -r requirements.txt
 python data/generate_sales_data.py     # raw extract (deterministic, seed 42)
 python python/etl_pipeline.py          # clean + partition → Parquet
 python -m pytest tests/ -v             # 19 tests, incl. executing the Athena SQL
-python python/render_previews.py       # optional: regenerate the preview PNGs
+python python/render_previews.py       # optional: re-render the preview PNGs
 python python/generate_interactive_dashboard.py  # optional: rebuild the live HTML dashboard
 ```
 
